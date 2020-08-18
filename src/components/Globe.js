@@ -597,7 +597,8 @@ export default class Globe extends Component {
 
     // Change the startup position if given 
     if (this.props.latitude && this.props.longitude) {
-      this.lookAt(this.props.latitude, this.props.longitude, this.props.altitude)
+      //this.lookAt(this.props.latitude, this.props.longitude, this.props.altitude);
+      this.goTo(new WorldWind.Position(this.props.latitude, this.props.longitude, this.props.altitude));
     }
 
     // Update state
