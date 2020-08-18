@@ -597,8 +597,8 @@ export default class Globe extends Component {
 
     // Change the startup position if given 
     if (this.props.latitude && this.props.longitude) {
-      //this.lookAt(this.props.latitude, this.props.longitude, this.props.altitude);
-      this.goTo(new WorldWind.Position(this.props.latitude, this.props.longitude, this.props.altitude));
+      this.lookAt(this.props.latitude, this.props.longitude, this.props.altitude);
+      //this.goTo(new WorldWind.Position(this.props.latitude, this.props.longitude, this.props.altitude));
     }
 
     // Update state
@@ -630,43 +630,6 @@ export default class Globe extends Component {
         placemarkLayer.addRenderable(placemark);
         this.addLayer(placemarkLayer);
     };
-
-   createMarker(width, height, radius) {
-
-          var canvas, context;
-
-          canvas = document.createElement("canvas");
-          canvas.width = width;
-          canvas.height = height;
-
-          context = canvas.getContext("2d");
-
-          context.clearRect(0,0,width,height);
-
-          // background is yellow
-          context.fillStyle = "rgba(255,255,0,1)";
-
-          // border is black
-          context.strokeStyle = "rgba(0,0,0,1)";
-
-          context.beginPath();
-          context.moveTo(radius, 0);
-          context.lineTo(width - radius, 0);
-          context.quadraticCurveTo(width, 0, width, radius);
-          context.lineTo(width, height - radius);
-          context.quadraticCurveTo(width, height, width - radius, height);
-          context.lineTo(radius, height);
-          context.quadraticCurveTo(0, height, 0, height - radius);
-          context.lineTo(0, radius);
-          context.quadraticCurveTo(0, 0, radius, 0);
-          context.closePath();
-
-          context.fill();
-          context.stroke();
-
-          return canvas.toDataURL();
-
-        }
 
   render() {
     let cursor = (this.state.isDropArmed ? 'crosshair' : 'default');
