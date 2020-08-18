@@ -602,6 +602,45 @@ export default class Globe extends Component {
     this.setState({isValid: true});
   }
 
+ componentDidMount() {
+    this.addMarker(this.props.marker);
+ }
+
+  addMarker(position) {
+        // Create a placemark using the selected marker image
+        let attributes = new WorldWind.PlacemarkAttributes(null);
+        attributes.imageScale = 0.8;
+        attributes.imageOffset = new WorldWind.Offset(
+            WorldWind.OFFSET_FRACTION, 0.3,
+            WorldWind.OFFSET_FRACTION, 0.0);
+        attributes.imageColor = WorldWind.Color.WHITE;
+        attributes.labelAttributes.offset = new WorldWind.Offset(
+            WorldWind.OFFSET_FRACTION, 0.5,
+            WorldWind.OFFSET_FRACTION, 1.0);
+        attributes.labelAttributes.color = WorldWind.Color.YELLOW;
+        attributes.drawLeaderLine = true;
+        attributes.leaderLineAttributes.outlineColor = WorldWind.Color.RED;
+        attributes.imageSource = this.state.selectedMarkerImage;
+
+        let placemark = new WorldWind.Placemark(position, /*eyeDistanceScaling*/ true, attributes);
+        placemark.label = "Lat " + position.latitude.toPrecision(4).toString() + "\nLon " + position.longitude.toPrecision(5).toString();
+        placemark.altitudeMode = WorldWind.CLAMP_TO_GROUND;
+        placemark.eyeDistanceScalingThreshold = 2500000;
+
+        // Add the placemark to the layer and to the Markers component
+        const globe = this.props.globe;
+        const layer = globe.getLayer(this.props.markersLayerName);
+        if (layer) {
+            // Add the placemark to the globe
+            layer.addRenderable(placemark);
+            
+            // Add the placemark to the Markers component
+            this.props.markers.addMarker(placemark);
+        } else {
+            console.warn("Renderable layer for markers not found: "+ this.props.markersLayerName);
+        }
+    };
+
   render() {
     let cursor = (this.state.isDropArmed ? 'crosshair' : 'default');
     let backgroundColor = (this.props.backgroundColor || DEFAULT_BACKGROUND_COLOR); // this should use a defaultProps
