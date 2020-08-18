@@ -618,10 +618,9 @@ export default class Globe extends Component {
         attributes.labelAttributes.color = WorldWind.Color.YELLOW;
         attributes.drawLeaderLine = true;
         attributes.leaderLineAttributes.outlineColor = WorldWind.Color.RED;
-        attributes.imageSource = new WorldWind.ImageSource(this.createMarker(32, 32, 0));
+        attributes.imageSource = "https://files.worldwind.arc.nasa.gov/artifactory/web/0.9.0/images/pushpins/castshadow-red.png";
 
         let placemark = new WorldWind.Placemark(position, /*eyeDistanceScaling*/ true, attributes);
-        placemark.label = "Lat " + position.latitude.toPrecision(4).toString() + "\nLon " + position.longitude.toPrecision(5).toString();
         placemark.altitudeMode = WorldWind.CLAMP_TO_GROUND;
         placemark.eyeDistanceScalingThreshold = 2500000;
     
