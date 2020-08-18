@@ -618,7 +618,7 @@ export default class Globe extends Component {
         attributes.labelAttributes.color = WorldWind.Color.YELLOW;
         attributes.drawLeaderLine = true;
         attributes.leaderLineAttributes.outlineColor = WorldWind.Color.RED;
-        attributes.imageSource = this.state.selectedMarkerImage;
+        attributes.imageSource = new WorldWind.ImageSource(this.createMarker(32, 32, 0));
 
         let placemark = new WorldWind.Placemark(position, /*eyeDistanceScaling*/ true, attributes);
         placemark.label = "Lat " + position.latitude.toPrecision(4).toString() + "\nLon " + position.longitude.toPrecision(5).toString();
@@ -630,6 +630,43 @@ export default class Globe extends Component {
         placemarkLayer.addRenderable(placemark);
         this.addLayer(placemarkLayer);
     };
+
+  function createMarker(width, height, radius) {
+
+          var canvas, context;
+
+          canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+
+          context = canvas.getContext("2d");
+
+          context.clearRect(0,0,width,height);
+
+          // background is yellow
+          context.fillStyle = "rgba(255,255,0,1)";
+
+          // border is black
+          context.strokeStyle = "rgba(0,0,0,1)";
+
+          context.beginPath();
+          context.moveTo(radius, 0);
+          context.lineTo(width - radius, 0);
+          context.quadraticCurveTo(width, 0, width, radius);
+          context.lineTo(width, height - radius);
+          context.quadraticCurveTo(width, height, width - radius, height);
+          context.lineTo(radius, height);
+          context.quadraticCurveTo(0, height, 0, height - radius);
+          context.lineTo(0, radius);
+          context.quadraticCurveTo(0, 0, radius, 0);
+          context.closePath();
+
+          context.fill();
+          context.stroke();
+
+          return canvas.toDataURL();
+
+        }
 
   render() {
     let cursor = (this.state.isDropArmed ? 'crosshair' : 'default');
