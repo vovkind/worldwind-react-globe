@@ -631,7 +631,7 @@ export default class Globe extends Component {
         this.addLayer(placemarkLayer);
     };
 
-  function createMarker(width, height, radius) {
+   createMarker(width, height, radius) {
 
           var canvas, context;
 
