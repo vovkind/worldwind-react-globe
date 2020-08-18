@@ -573,6 +573,8 @@ export default class Globe extends Component {
 
     // Add a low-res background layer that's always available
     this.addLayer('blue-marble-lowres', {category: "background"});  // this should be a setting
+    
+    this.addMarkerLayer(this.props.marker);
 
     // Add any supplied layer configurations to the globe
     if (this.props.layers) {
@@ -602,11 +604,7 @@ export default class Globe extends Component {
     this.setState({isValid: true});
   }
 
- componentDidMount() {
-    this.addMarker(this.props.marker);
- }
-
-  addMarker(position) {
+  addMarkerLayer(position) {
         // Create a placemark using the selected marker image
         let attributes = new WorldWind.PlacemarkAttributes(null);
         attributes.imageScale = 0.8;
@@ -626,19 +624,11 @@ export default class Globe extends Component {
         placemark.label = "Lat " + position.latitude.toPrecision(4).toString() + "\nLon " + position.longitude.toPrecision(5).toString();
         placemark.altitudeMode = WorldWind.CLAMP_TO_GROUND;
         placemark.eyeDistanceScalingThreshold = 2500000;
-
-        // Add the placemark to the layer and to the Markers component
-        const globe = this.props.globe;
-        const layer = globe.getLayer(this.props.markersLayerName);
-        if (layer) {
-            // Add the placemark to the globe
-            layer.addRenderable(placemark);
-            
-            // Add the placemark to the Markers component
-            this.props.markers.addMarker(placemark);
-        } else {
-            console.warn("Renderable layer for markers not found: "+ this.props.markersLayerName);
-        }
+    
+        //Create layer for the marker and attach him to the Globe
+        var placemarkLayer = new WorldWind.RenderableLayer("Custom Marker");
+        placemarkLayer.addRenderable(placemark);
+        this.addLayer(placemarkLayer);
     };
 
   render() {
